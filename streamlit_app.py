@@ -49,7 +49,19 @@ if ingredients_list:
        st.success('Your smoothie is ordered!', icon="✅")
        st.write(f"✅ Your smoothie is ordered, {name_on_order}!")
 
-    import requests
-    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-    st.text(fruityvice_response)
+import requests
 
+# Attempt to fetch data from the API
+try:
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+    
+    # Check if the request was successful
+    if fruityvice_response.status_code == 200:
+        st.text(fruityvice_response.json())  # Display the JSON data if successful
+    else:
+        st.text(f"Error: Received a {fruityvice_response.status_code} status code.")
+        st.text(f"Response: {fruityvice_response.text}")
+
+except requests.exceptions.RequestException as e:
+    # Handle any network errors
+    st.text(f"Request failed: {e}")
